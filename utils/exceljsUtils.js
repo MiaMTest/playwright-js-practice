@@ -1,0 +1,156 @@
+import ExcelJS from 'exceljs'; //import ExcelJS class
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+//Extracts the path of the parent folder(directory) that contains the current file
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+//Resolve the path relative to the script(go up to project root, then data folder)
+export const filePath = path.join(__dirname, '/../data/download.xlsx');
+
+
+// Shared helper to load the Excel file and return core context.
+async function getWorksheetContext() {
+   const workbook = new ExcelJS.Workbook();
+   await workbook.xlsx.readFile(filePath);
+   //const worksheet = workbook.getWorksheet('Sheet1');
+   const worksheet = workbook.worksheets[0];
+
+   if (!worksheet) {
+      console.error('No worksheet found in the workbook');
+      return null;
+   };
+   return { workbook, worksheet, filePath };
+}
+
+
+async function readExcel() {
+
+   const context = await getWorksheetContext();
+   if (!context) {
+      console.error('Cannot read Excel: Worksheet context is invalid or missing ')
+      return;
+   }
+   const { worksheet } = context;
+
+   //Iterate the value in worksheet
+   worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell, cellNumber) => {
+         console.log(cell.value);
+      })
+   });
+
+}
+
+
+/**
+ * Update any specific column property for a given item dynamically.
+ * @param {string} lookupKey - The item name to search for (e.g., 'Apple')
+ * @param {string} targetColumnHeader - The column header to update (e.g., 'price', 'color', 'season')
+ * @param {any} newValue - The new value to set (e.g., 1200.00, 'Summer', 'Red')
+ */
+export async function updateItemproperty(lookupKey, targetColumnHeader, newValue) {
+   const context = await getWorksheetContext();
+   if (!context) return;
+   //JS object destructuring to extrat properties into an object
+   const { workbook, worksheet, filePath } = context;
+
+   //Dynamically locate the target column index based on the header name provided
+   let targetColumnIndex = null;
+   const headerRow = await worksheet.getRow(1);
+   headerRow.eachCell((cell, colNumber) => {
+      //Using optional chaining to clean the header string to make matching flexible
+      const currentHeader = cell.value?.toString().toLowerCase().trim();
+      if (currentHeader === targetColumnHeader.toLowerCase()) {
+         targetColumnIndex = colNumber;
+      }
+   });
+
+   if (!targetColumnIndex) {
+      console.error(`Could not find ${targetColumnHeader} column header`)
+   }
+
+   //Add flag for saving perfomance(rewrite only flag updated) and preventing data corruption.
+   let isUpdated = false;
+   worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell, colNumber) => {
+
+         if (cell.value?.toString().toLowerCase().trim() === lookupKey.toLowerCase()) {
+            const targetCell = row.getCell(targetColumnIndex);
+            targetCell.value = newValue;
+            isUpdated = true;
+         }
+      })
+   });
+
+   if (isUpdated) {
+      await workbook.xlsx.writeFile(filePath);
+      console.log(`Successfully updated  ${targetColumnHeader} to ${newValue} for ${lookupKey}`);
+   } else {
+      console.log(`Item ${lookupKey} not found`);
+   }
+}
+
+export async function saveRowData(rowData, insertAtPosition=null){
+   const context = await getWorksheetContext();
+   if (!context) return;
+   const {workbook,worksheet,filePath} = context;
+   if(insertAtPosition !== null) {
+      worksheet.insertRow(insertAtPosition,rowData);
+      console.log(`Row successfully inserted at position ${insertAtPosition}`);
+   } else {
+      worksheet.addRow(rowData);
+      console.log('Row successfully appended to the end of the sheet')
+   }
+
+   await workbook.xlsx.writeFile(filePath);
+}
+
+export async function deleteRow(startRow, deleteCount){
+
+   const context = await getWorksheetContext();
+   if (!context) return;
+   const {workbook,worksheet,filePath} = context;
+   worksheet.spliceRows(startRow,deleteCount);
+   console.log('Row deleted successfully.')
+   await workbook.xlsx.writeFile(filePath);
+
+}
+
+
+async function findAndReplaceAll(targetValue, newValue) {
+   const context = await getWorksheetContext();
+   if (!context) return;
+   const { workbook, worksheet, filePath } = context;
+
+   let found = false;
+   worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell, colNumber) => {
+         if (cell.value === targetValue) {
+            console.log(`Found ${targetValue} at Row ${rowNumber} Cell ${colNumber}`)
+            cell.value = newValue;
+            found = true;
+         }
+      })
+   });
+
+   if (found) {
+      await workbook.xlsx.writeFile(filePath);
+   }
+   else {
+      console.log(`Target value ${targetValue} was not found in the sheet.`)
+   }
+}
+
+//readExcel();
+//await findAndReplaceAll('Kivi', 'Kiwi');
+//To update a price:
+//await updateItemproperty('kiwi', 'price', '11.15');
+//To update a season:
+//await updateItemproperty('Kiwi','season','Fall')
+//await saveRowData([2,'Kyle','Green',5.15,'Summer'],3)
+//await saveRowData([7,'Eggplant','White',3.75,'Summer'])
+
+
+//await deleteRow(9,1);
+
+//await readExcel();
