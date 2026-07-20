@@ -90,27 +90,51 @@ export async function updateItemproperty(lookupKey, targetColumnHeader, newValue
    }
 }
 
-export async function saveRowData(rowData, insertAtPosition=null){
+export async function saveRowData(rowData, insertAtPosition = null) {
    const context = await getWorksheetContext();
    if (!context) return;
-   const {workbook,worksheet,filePath} = context;
-   if(insertAtPosition !== null) {
-      worksheet.insertRow(insertAtPosition,rowData);
-      console.log(`Row successfully inserted at position ${insertAtPosition}`);
-   } else {
-      worksheet.addRow(rowData);
-      console.log('Row successfully appended to the end of the sheet')
+   const { workbook, worksheet, filePath } = context;
+
+   // Auto-generate SNo at the start column, handle data structured as an Array or an Object
+   const formatRowWithSNo = (sNoValue, data) => {
+      return Array.isArray(data) ? [sNoValue, ...data] : { sNo: sNoValue, ...data };
    }
 
-   await workbook.xlsx.writeFile(filePath);
+   const rowCount = worksheet.rowCount;
+   //INSERTION FLOW (middle of sheet)
+   if (insertAtPosition != null && insertAtPosition <= rowCount) {
+      //Use the target position as the new row's SNo
+      const finalRowData = formatRowWithSNo(insertAtPosition, rowData);
+      worksheet.insertRow(insertAtPosition, finalRowData);
+
+
+      //CASCADING RE-INDEX:update every single row below the insertion point
+      for (let i = insertAtPosition +1; i <= rowCount; i++) {
+         const currentRow = worksheet.getRow(i);
+         currentRow.getCell(1).value = i;
+         currentRow.commit(); //Update the internal row layout buffer;Ensure row's change are locked
+      }
+      await workbook.xlsx.writeFile(filePath);
+      console.log(`Row successfully inserted at position ${insertAtPosition}`)
+   } else {
+      //APPEND FLOW (end of sheet)
+    
+      const nextSNo = rowCount > 0 ? rowCount : 1;
+      const finalRowData = formatRowWithSNo(nextSNo, rowData);
+      await worksheet.addRow(finalRowData);
+      await workbook.xlsx.writeFile(filePath);
+      console.log('Row successfully appended to the end of the sheet')
+   }
 }
 
-export async function deleteRow(startRow, deleteCount){
+
+
+export async function deleteRow(startRow, deleteCount) {
 
    const context = await getWorksheetContext();
    if (!context) return;
-   const {workbook,worksheet,filePath} = context;
-   worksheet.spliceRows(startRow,deleteCount);
+   const { workbook, worksheet, filePath } = context;
+   worksheet.spliceRows(startRow, deleteCount);
    console.log('Row deleted successfully.')
    await workbook.xlsx.writeFile(filePath);
 
@@ -147,7 +171,7 @@ async function findAndReplaceAll(targetValue, newValue) {
 //await updateItemproperty('kiwi', 'price', '11.15');
 //To update a season:
 //await updateItemproperty('Kiwi','season','Fall')
-//await saveRowData([2,'Kyle','Green',5.15,'Summer'],3)
+//await saveRowData(['Water Melon', 'white', 555.5, 'Summer']);
 //await saveRowData([7,'Eggplant','White',3.75,'Summer'])
 
 

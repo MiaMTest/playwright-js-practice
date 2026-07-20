@@ -1,6 +1,10 @@
 import { expect } from "@playwright/test";
 
 export class LoginPage {
+    //Using JSDoctype hinting to get autocomplete(IntelliSensense) and method suggestions
+    /**
+   * @param {import('@playwright/test').Page} page
+   */
     constructor(page) {
         this.page = page;
         this.userNameInput = page.locator('#username');
@@ -39,4 +43,4 @@ export class LoginPage {
     }
 
 }
-    
+

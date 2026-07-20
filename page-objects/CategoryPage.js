@@ -1,7 +1,11 @@
 
-import expect from "@playwright/test"
+import {expect} from "@playwright/test"
+
 
 export class CategoryPage {
+    /**
+* @param {import('@playwright/test').Page} page
+*/
     constructor(page) {
         this.page = page; //store the page object so the methods can use it
         this.productCards = page.locator('div.card');
@@ -14,12 +18,7 @@ export class CategoryPage {
             .getByRole('button', { name: 'Add' }).click();
     }
 
-    async verifyArticleNb(articleNb) {
-        return await this.checkoutLink.hasCount();
-
-    }
-
-    async goCheckoutPage(){
+    async goCheckoutPage() {
         await this.checkoutLink.click();
     }
 }

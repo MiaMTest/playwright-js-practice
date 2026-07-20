@@ -4,7 +4,7 @@ import { RegistrationPage } from '../page-objects/RegistrationPage'
 
 test('moave away focus, alert visible', async ({ page }) => {
 
-    page.goto('https://rahulshettyacademy.com/angularpractice/');
+    page.goto('/angularpractice/');
 
     const registrationPage = new RegistrationPage(page);
     await registrationPage.focusNameInput();
@@ -23,7 +23,7 @@ test('moave away focus, alert visible', async ({ page }) => {
 
 test('registration test', async ({ page }) => {
 
-    page.goto('https://rahulshettyacademy.com/angularpractice/');
+    page.goto('/angularpractice/');
 
     const registrationPage = new RegistrationPage(page);
 

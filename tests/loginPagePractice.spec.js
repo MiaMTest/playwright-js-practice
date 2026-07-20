@@ -15,14 +15,14 @@ test("Browser Context fixture test", async ({ browser }) => {
 
 test("page fixture test", async ({ page }) => {
   //with default browser, context
-  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  await page.goto("/loginpagePractise/");
   await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
 
 })
 
 test('Block by alert when login with incorrect username', async ({ page }) => {
   const loginPage = new LoginPage(page);
-  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  await page.goto("/loginpagePractise/");
   await loginPage.login('', ' Learning@830$3mK2');
   await expect(loginPage.alertMsg).toBeVisible();
 
@@ -32,26 +32,25 @@ test('Block by alert when login with incorrect username', async ({ page }) => {
 
 test('User can login successfully', async ({ page }) => {
   const loginPage = new LoginPage(page);
-  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  await page.goto("/loginpagePractise/");
 
   await loginPage.login('rahulshettyacademy', 'Learning@830$3mK2');
   await expect(page).toHaveTitle('ProtoCommerce');
 
   const categoryPage = new CategoryPage(page);
-  const checkoutLink = categoryPage.verifyArticleNb();
-  await expect(checkoutLink).toHaveCount(0);
+  await expect(categoryPage.checkoutLink).toContainText('0');
   await categoryPage.addProduct('Samsung Note 8');
 
   //Explicitly wait for the checkout button to be ready again
-  await checkoutLink.waitFor({ state: 'visible' });
-  await expect(categoryPage.verifyArticleNb()).toContainText('1');
+  await categoryPage.checkoutLink.waitFor({ state: 'visible' });
+  await expect(categoryPage.checkoutLink).toContainText('1');
 
 })
 
 
 test('Child window handle test', async ({ context, page }) => {
   const loginPage = new LoginPage(page);
-  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  await page.goto("/loginpagePractise/");
 
   const blinkingLinks = loginPage.getBlinkingLinks();
   await expect(blinkingLinks.docLink).toHaveAttribute('class', 'blinkingText');
@@ -75,5 +74,6 @@ test('Child window handle test', async ({ context, page }) => {
 
 
 })
+
 
 

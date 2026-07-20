@@ -8,10 +8,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.61.0",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^26.0.0"
   },
-  "type":"module",
+  "type": "module",
   "dependencies": {
     "exceljs": "^4.4.0"
   }

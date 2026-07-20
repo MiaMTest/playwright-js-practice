@@ -1,4 +1,8 @@
 export class RegistrationPage {
+    //Using JSDoctype hinting to get autocomplete(IntelliSensense) and method suggestions
+    /**
+   * @param {import('@playwright/test').Page} page
+   */
     constructor(page) {
         this.page = page;
         this.protractorText = page.getByText('Protractor Tutorial');
@@ -30,13 +34,14 @@ export class RegistrationPage {
     }
     //Extract specific string value form data object
     async fillRegistrationForm(userData) {
-        if(userData.name) await this.nameInput.fill(userData.name);
-        if(userData.email) await this.emailInput.fill(userData.email);
-        if(userData.password) await this.passwordInput.fill(userData.password);
+        //Putting if condition (defensive programming best practice),return undefined instead of error when missing data
+        if (userData.name) await this.nameInput.fill(userData.name);
+        if (userData.email) await this.emailInput.fill(userData.email);
+        if (userData.password) await this.passwordInput.fill(userData.password);
         await this.iceCreamCheckBox.check();
-        if(userData.gender) await this.genderDropdown.selectOption(userData.gender);
-        if(userData.status) await this.page.getByLabel(userData.status).check();
-        if(userData.DOB) await this.dateofBirthInput.fill(userData.DOB);
+        if (userData.gender) await this.genderDropdown.selectOption(userData.gender);
+        if (userData.status) await this.page.getByLabel(userData.status).check();
+        if (userData.DOB) await this.dateofBirthInput.fill(userData.DOB);
 
 
     }

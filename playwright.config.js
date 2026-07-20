@@ -5,7 +5,7 @@ import { chromium, defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
-  timeout: 40_000, //overwrite timeout, 30 sec by default
+  timeout: 30_000, //overwrite timeout, 30 sec by default
   expect: { //assertion timeout
     timeout: 10_000,
   },
@@ -14,6 +14,7 @@ export default defineConfig({
   ,
 
   use: {//block for settings that dictate how browser behaves
+    baseURL: 'https://rahulshettyacademy.com/',
     browserName: 'chromium',
     headless: false,
     screenshot: "on",
