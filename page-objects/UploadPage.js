@@ -3,7 +3,7 @@ export class UploadPage {
     //Using JSDoctype hinting to get autocomplete(IntelliSensense) and method suggestions
     /**
    * @param {import('@playwright/test').Page} page
-   */
+     */
     constructor(page) {
         this.page = page;
         this.downloadBtn = page.getByRole('button', { name: 'Download' });
@@ -26,10 +26,20 @@ export class UploadPage {
         const itemLocator = this.page.getByText(item);
         const targetRow = this.page.locator('div[role="row"]').filter({ has: itemLocator });
         const targetCell = targetRow.locator(`#cell-${targetColumnId}-undefined`);
-       // const targetCell = targetRow.locator(`div[data-column-id=${targetColumnId}]`);
-       const value = await targetCell.textContent();
-       return value;
+        // const targetCell = targetRow.locator(`div[data-column-id=${targetColumnId}]`);
+        const value = await targetCell.textContent();
+        return value;
 
+
+    }
+
+    async getRowCellsFromUI(itemName) {
+        //Locate the row that contains the item text
+        const rowLocator = this.page.locator('div[role="row"]').filter({ hasText: itemName });
+        await rowLocator.waitFor({ state: 'visible' });
+        //Grab the text of all 'td' elements inside the row
+        const cellValues = await rowLocator.locator('div[role="cell"]').allTextContents();
+        return cellValues.map(cell => cell.trim()); //Trim whitespace and line break
 
     }
 

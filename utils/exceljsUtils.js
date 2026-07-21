@@ -165,16 +165,4 @@ async function findAndReplaceAll(targetValue, newValue) {
    }
 }
 
-//readExcel();
-//await findAndReplaceAll('Kivi', 'Kiwi');
-//To update a price:
-//await updateItemproperty('kiwi', 'price', '11.15');
-//To update a season:
-//await updateItemproperty('Kiwi','season','Fall')
-//await saveRowData(['Water Melon', 'white', 555.5, 'Summer']);
-//await saveRowData([7,'Eggplant','White',3.75,'Summer'])
 
-
-//await deleteRow(9,1);
-
-//await readExcel();
