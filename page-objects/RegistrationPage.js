@@ -1,3 +1,4 @@
+
 export class RegistrationPage {
     //Using JSDoctype hinting to get autocomplete(IntelliSensense) and method suggestions
     /**
@@ -32,6 +33,18 @@ export class RegistrationPage {
         await this.emailInput.click();
 
     }
+
+    async fillFormWithCustomFixture(data) {
+        await this.nameInput.fill(data.name);
+        await this.emailInput.fill(data.email);
+        await this.passwordInput.fill(data.password);
+        await this.iceCreamCheckBox.check();
+        await this.genderDropdown.selectOption(data.gender);
+        await this.page.getByLabel(data.status).check();
+        await this.dateofBirthInput.fill(data.DOB);
+
+
+    }
     //Extract specific string value form data object
     async fillRegistrationForm(userData) {
         //Putting if condition (defensive programming best practice),return undefined instead of error when missing data
@@ -49,6 +62,20 @@ export class RegistrationPage {
     async submitForm() {
         await this.submitBtn.click();
     }
+
+    //Using Object Destructuring: wrap parameters in curly braces inside function definition
+    async fillFormWithExternalJson({ name, email, password, gender, status, DOB }) {
+        await this.nameInput.fill(name);
+        await this.emailInput.fill(email);
+        await this.passwordInput.fill(password);
+        await this.iceCreamCheckBox.check();
+        await this.genderDropdown.selectOption(gender);
+        await this.page.getByLabel(status).check();
+        await this.dateofBirthInput.fill(DOB);
+
+    }
+
+
 
 
 }

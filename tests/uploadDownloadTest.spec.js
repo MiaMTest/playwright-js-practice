@@ -19,7 +19,7 @@ test.describe('Upload the updated excel data file', async () => {
 
     })
 
-    test.only('Upload excel file after added new row data', async ({ page }) => {
+    test('Upload excel file after added new row data', async ({ page }) => {
 
         //Download and save file in project directory
         const donwloadPromise = page.waitForEvent('download');

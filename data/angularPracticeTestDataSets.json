@@ -1,0 +1,16 @@
+[{
+    "name": "Emily",
+    "email": "Emily@hotmail.com",
+    "password": "Ppp000!",
+    "gender": "Female",
+    "status": "Employed",
+    "DOB": "2009-09-19"
+},
+{
+    "name": "Joe",
+    "email": "Joe@hotmail.com",
+    "password": "Ppp000!",
+    "gender": "Male",
+    "status": "Employed",
+    "DOB": "2009-09-19"
+}]
