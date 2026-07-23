@@ -13,3 +13,4 @@ export class DocumentRequestPage {
         return await this.emailAddress.textContent();
     }
 }
+

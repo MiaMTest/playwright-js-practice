@@ -1,25 +1,15 @@
-import { test, expect } from '@playwright/test';
-import { RegistrationPage } from '../page-objects/RegistrationPage';
+import {expect } from '@playwright/test';
 import registrationData from '../data/angularPracticeTestData.json' with {type: 'json'};
 import dataset from '../data/angularPracticeTestDataSets.json' with {type: 'json'};
 import { describe } from 'node:test';
 import { customTest } from '../utils/base-test';
 
 
-test.describe('Angular Practice Suite', () => {
-    /**@type {RegistrationPage} */
-    let registrationPage;
+customTest.describe('Angular Practice Suite', () => {
 
-    test.beforeEach(async ({ page }) => {
-
-        registrationPage = new RegistrationPage(page);
-        await page.goto('/angularpractice/');
-
-    })
-
-    //Pass test data as fixture by extend test annotation
+    //Pass test data and page object as fixture by extend test annotation
     //Only accept one data set, cannot apply parameterization
-    customTest('Submit form with custom fixture', async ({registrationData}) => {
+    customTest('Submit form with custom fixture', async ({registrationData,registrationPage}) => {
         await registrationPage.fillFormWithCustomFixture(registrationData);
         await registrationPage.submitForm();
         await expect(registrationPage.formSubmittedSuccessText).toBeVisible();
@@ -27,10 +17,9 @@ test.describe('Angular Practice Suite', () => {
     })
 
 
-
     //Implement parameterization in running tests with different data sets
     dataset.forEach((data) => {
-        test(`Registration for ${data.name}`, async () => {
+        customTest(`Registration for ${data.name}`, async ({registrationPage}) => {
             await registrationPage.fillFormWithExternalJson(data);
             await registrationPage.submitForm();
             await expect(registrationPage.formSubmittedSuccessText).toBeVisible();
@@ -39,8 +28,7 @@ test.describe('Angular Practice Suite', () => {
     })
 
 
-
-    test('Registration test -- drive data from external json file', async () => {
+    customTest('Registration test -- drive data from external json file', async ({registrationPage}) => {
         await registrationPage.fillFormWithExternalJson(registrationData);
         await registrationPage.submitForm();
         await expect(registrationPage.formSubmittedSuccessText).toBeVisible();
@@ -48,7 +36,7 @@ test.describe('Angular Practice Suite', () => {
     })
 
 
-    test('registration test--driver data from JS object', async () => {
+    customTest('registration test--driver data from JS object', async ({registrationPage}) => {
 
 
         //Create a JS object to store data
@@ -75,7 +63,7 @@ test.describe('Angular Practice Suite', () => {
 
     })
 
-    test('move away focus, alert visible', async () => {
+    customTest('move away focus, alert visible', async ({registrationPage}) => {
 
         await registrationPage.focusNameInput();
         await expect(registrationPage.nameAlert).toBeHidden();

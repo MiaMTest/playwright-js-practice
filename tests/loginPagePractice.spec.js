@@ -1,43 +1,21 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../page-objects/LoginPage";
-import { CategoryPage } from "../page-objects/CategoryPage";
-import { DocumentRequestPage } from "../page-objects/DocumentRequestPage";
-
-test("Browser Context fixture test", async ({ browser }) => {
-  //Open a fresh browser instance, inject cookies/cache if needed
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  await page.goto("https://google.com/");
-  console.log(await page.title());
+import { expect } from "@playwright/test";
+import { customTest } from "../utils/base-test";
+import {DocumentRequestPage} from '../page-objects/DocumentRequestPage';
 
 
-})
+customTest('Block by alert when login with incorrect username', async ({ loginPage }) => {
 
-test("page fixture test", async ({ page }) => {
-  //with default browser, context
-  await page.goto("/loginpagePractise/");
-  await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
-
-})
-
-test('Block by alert when login with incorrect username', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await page.goto("/loginpagePractise/");
   await loginPage.login('', ' Learning@830$3mK2');
   await expect(loginPage.alertMsg).toBeVisible();
 
-
 })
 
 
-test('User can login successfully', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await page.goto("/loginpagePractise/");
+customTest('User can login successfully', async ({ page, loginPage, categoryPage }) => {
 
   await loginPage.login('rahulshettyacademy', 'Learning@830$3mK2');
   await expect(page).toHaveTitle('ProtoCommerce');
 
-  const categoryPage = new CategoryPage(page);
   await expect(categoryPage.checkoutLink).toContainText('0');
   await categoryPage.addProduct('Samsung Note 8');
 
@@ -48,10 +26,7 @@ test('User can login successfully', async ({ page }) => {
 })
 
 
-test('Child window handle test', async ({ context, page }) => {
-  const loginPage = new LoginPage(page);
-  await page.goto("/loginpagePractise/");
-
+customTest('Child window handle test', async ({ context, page, loginPage }) => {
   const blinkingLinks = loginPage.getBlinkingLinks();
   await expect(blinkingLinks.docLink).toHaveAttribute('class', 'blinkingText');
   await expect(blinkingLinks.smartHireLink).toHaveAttribute('class', 'blinkingText');
@@ -63,7 +38,6 @@ test('Child window handle test', async ({ context, page }) => {
 
   ])
   await newPage.waitForLoadState();//wait for new tab to load content
-
   const documentRequestPage = new DocumentRequestPage(newPage);
   const emailAddress = await documentRequestPage.getEmailAddress();
   const domain = emailAddress.split('@')[1].split('.')[0];
@@ -71,7 +45,6 @@ test('Child window handle test', async ({ context, page }) => {
   await page.bringToFront();
   await loginPage.login(domain, 'Learning@830$3mK2');
   await expect(page).toHaveTitle('ProtoCommerce');
-
 
 })
 

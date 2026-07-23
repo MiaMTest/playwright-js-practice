@@ -1,25 +1,17 @@
-import { expect, test } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { updateItemproperty, saveRowData } from '../utils/exceljsUtils';
-import { UploadPage } from '../page-objects/UploadPage';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { customTest } from '../utils/base-test';
 
 
 //Define a stable,unique file path to prvent cross-test data pollution
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const filePath = path.join(__dirname, '/../data/download.xlsx');
 
-test.describe('Upload the updated excel data file', async () => {
-     /**@type {UploadPage} */
-    let uploadPage;
+customTest.describe('Upload the updated excel data file', async () => {
 
-    test.beforeEach(async ({ page }) => {
-        uploadPage = new UploadPage(page);
-        await page.goto('/upload-download-test/');
-
-    })
-
-    test('Upload excel file after added new row data', async ({ page }) => {
+    customTest.only('Upload excel file after added new row data', async ({ page,uploadPage }) => {
 
         //Download and save file in project directory
         const donwloadPromise = page.waitForEvent('download');
@@ -41,7 +33,7 @@ test.describe('Upload the updated excel data file', async () => {
     })
 
 
-    test('Upload modified excel file', async ({ page }) => {
+    customTest('Upload modified excel file', async ({ page,uploadPage }) => {
 
         //destructure array to capture download object
         const [download] = await Promise.all([

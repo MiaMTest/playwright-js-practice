@@ -1,18 +1,10 @@
-import { test, expect } from '@playwright/test';
-import { AutomationPracticePage } from '../page-objects/AutomationPracticePage';
-
-test.describe('Automation practice tests', () => {
-    /**@type {AutomationPracticePage} */
-    let autoPracticePage;
-
-    test.beforeEach(async ({ page, context }) => {
-        autoPracticePage = new AutomationPracticePage(page, context);
-        await page.goto('/AutomationPractice/');
-    })
+import { expect } from '@playwright/test';
+import { customTest } from '../utils/base-test';
 
 
+customTest.describe('Automation practice tests', () => {
 
-    test('dialog handling test', async () => {
+    customTest('dialog handling test', async ({autoPracticePage}) => {
         const name = 'Tom Hanks';
         let alertMessage = '';
 
@@ -24,7 +16,7 @@ test.describe('Automation practice tests', () => {
 
     })
 
-    test('mouse hover test', async () => {
+    customTest('mouse hover test', async ({autoPracticePage}) => {
 
         await expect(autoPracticePage.moveToTopLink).not.toBeVisible();
         await autoPracticePage.mourseHoverBtn.hover();
@@ -34,7 +26,7 @@ test.describe('Automation practice tests', () => {
 
     })
 
-    test('window handle test', async ({ page }) => {
+    customTest('window handle test', async ({ page,autoPracticePage }) => {
         await expect(page).toHaveTitle('Practice Page');
         const newPage = await autoPracticePage.openAndGetNewWindow();
         await expect(newPage).toHaveURL('https://www.qaclickacademy.com/');
@@ -43,25 +35,25 @@ test.describe('Automation practice tests', () => {
 
     })
 
-    test('frame handle test', async ({ page }) => {
+    customTest('frame handle test', async ({ autoPracticePage }) => {
         await autoPracticePage.navigateToAllAccessPlan();
         const suscriberNb = await autoPracticePage.getsuscriberNumber();
         console.log(suscriberNb);
 
     })
 
-    test('visual comparison test', async ({ page }) => {
+    customTest.only('visual comparison test', async ({ page,autoPracticePage }) => {
         //Wait until network traffic completely stops
         await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot(autoPracticePage.png);
 
     });
 
-    test('text blinking test', async() =>{
+    customTest('text blinking test', async({autoPracticePage}) =>{
         await expect (autoPracticePage.blinkingText).toHaveClass(/blinking/);
     })
 
-    test('Web Table test', async(page)=>{
+    customTest('Web Table test', async({autoPracticePage})=>{
         const totalAmount = await autoPracticePage.calculateTotalAmount();
         const amountDisplayed = await autoPracticePage.getTotalAmountDisplayed();
         await expect(Number(amountDisplayed)).toBe(totalAmount);
