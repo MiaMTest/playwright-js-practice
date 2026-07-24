@@ -11,7 +11,7 @@ const filePath = path.join(__dirname, '/../data/download.xlsx');
 
 customTest.describe('Upload the updated excel data file', async () => {
 
-    customTest.only('Upload excel file after added new row data', async ({ page,uploadPage }) => {
+    customTest('Upload excel file after added new row data', async ({ page,uploadPage }) => {
 
         //Download and save file in project directory
         const donwloadPromise = page.waitForEvent('download');

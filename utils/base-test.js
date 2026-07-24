@@ -5,6 +5,17 @@ import { CategoryPage } from '../page-objects/CategoryPage';
 import { AutomationPracticePage } from '../page-objects/AutomationPracticePage';
 import { UploadPage } from '../page-objects/UploadPage';
 
+//Type the extended test:Add a typedef describing all fixtures to solve fixture IntelliSense missing
+/**
+ * @typedef {Object} CustomFixtures
+ * @property {LoginPage} loginPage
+ * @property {RegistrationPage} registrationPage
+ * @property {CategoryPage} categoryPage
+ * @property {AutomationPracticePage} autoPracticePage
+ * @property {UploadPage} uploadPage
+ */
+
+/** @type {import('@playwright/test').TestType<CustomFixtures, {}>} */
 
 //Imports the named export test and renames it locally to base
 //Calling .extend() returns a new test object that includes custom fixture
@@ -17,12 +28,14 @@ export const customTest = base.extend({
         status: "Employed",
         DOB: "2009-09-19"
     },
+      
     //Define custom fixture with fixture function receiving 2 arguments
     registrationPage: async ({ page }, use) => {
         const regPage = new RegistrationPage(page);
         await page.goto('/angularpractice/');
         await use(regPage); //Provide this regPage object to the test
     },
+
     loginPage: async ({ page }, use) => {
         const login = new LoginPage(page);
         await page.goto("/loginpagePractise/");

@@ -20,6 +20,7 @@ export class AutomationPracticePage {
         this.totalAmountCollected = page.getByText('Total Amount Collected:');
         this.amountCells = page.locator('.tableFixHead tbody tr td:nth-child(4)');
         this.cellsValue = page.locator('.tableFixHead tbody tr td');
+        this.sectionBelowPracticeHeader = page.locator('h1+div');
         //this.positionsLocator = page.locator('.tableFixHead tbody tr td:nth-child(2)')
 
 
