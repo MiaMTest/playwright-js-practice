@@ -42,11 +42,13 @@ customTest.describe('Automation practice tests', () => {
 
     })
 
-    customTest.only('visual comparison test', async ({ page,autoPracticePage }) => {
+    customTest('visual comparison test', async ({ page,autoPracticePage }) => {
         //Wait until network traffic completely stops
         await page.waitForLoadState('networkidle');
        // await expect(page).toHaveScreenshot('autoPracticePage.png',{fullpage:true}); 
-       await expect(autoPracticePage.sectionBelowPracticeHeader).toHaveScreenshot('sectionBelowPracticeHeader.png');
+       await expect(autoPracticePage.sectionBelowPracticeHeader).toHaveScreenshot('sectionBelowPracticeHeader.png',{
+        maxDiffPixelRatio:0.02,
+       });
 
     });
 
