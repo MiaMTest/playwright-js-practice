@@ -4,7 +4,7 @@ import dataset from '../data/angularPracticeTestDataSets.json' with {type: 'json
 import { describe } from 'node:test';
 import { customTest } from '../utils/base-test';
 
-
+customTest.describe.configure({mode:'parallel'});
 customTest.describe('Angular Practice Suite', () => {
 
     //Pass test data and page object as fixture by extend test annotation
@@ -14,9 +14,6 @@ customTest.describe('Angular Practice Suite', () => {
         await registrationPage.submitForm();
         await expect(registrationPage.formSubmittedSuccessText).toBeVisible();
         
-        console.log(process.version);
-        console.log(process.execPath);
-
     })
 
 

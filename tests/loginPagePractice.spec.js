@@ -10,7 +10,7 @@ customTest('Block by alert when login with incorrect username', async ({ loginPa
 })
 
 
-customTest('User can login successfully', async ({ page, loginPage, categoryPage }) => {
+customTest('@Smoke User can login successfully', async ({ page, loginPage, categoryPage }) => {
 
   await loginPage.login('rahulshettyacademy', 'Learning@830$3mK2');
   await expect(page).toHaveTitle('ProtoCommerce');
