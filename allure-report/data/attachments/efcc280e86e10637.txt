@@ -1,0 +1,4 @@
+[
+  { name: 'Alex', position: 'Engineer', city: 'Chennai', amount: 28 },
+  { name: 'Jack', position: 'Engineer', city: 'Pune', amount: 32 }
+]

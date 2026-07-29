@@ -9,7 +9,11 @@ export default defineConfig({
   expect: { //assertion timeout
     timeout: 10_000,
   },
-  reporter: 'html',
+  //reporter: 'html',
+  reporter: [
+    ['line'],
+    ['allure-playwright',{outputFolder:'allure-results'}]
+  ],
   retries: 1,
  // workers:6,
   //fullyParallel:true,
