@@ -19,6 +19,12 @@ jobs:
       uses: azure/login@v3
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Debug Playwright versions
+      run: |
+        node -v
+        npm ls @azure/playwright
+        npm ls @playwright/test
+        npm ls playwright
     - name: Run Playwright tests
       env:
         PLAYWRIGHT_SERVICE_URL: ${{ vars.PLAYWRIGHT_SERVICE_URL}}
