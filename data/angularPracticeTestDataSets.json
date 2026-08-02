@@ -1,4 +1,5 @@
 [{
+     "scenario":"Standard US Resident with Valid Credentials" ,
     "name": "Emily",
     "email": "Emily@hotmail.com",
     "password": "Ppp000!",
@@ -7,8 +8,9 @@
     "DOB": "2009-09-19"
 },
 {
-    "name": "Joe",
-    "email": "Joe@hotmail.com",
+    "scenario":"User with Maximum Allowed Input Lengths" ,
+    "name": "Alexander Bartholomew Montgomery-Smith III",
+    "email": "Alexander@hotmail.com",
     "password": "Ppp000!",
     "gender": "Male",
     "status": "Employed",

@@ -19,7 +19,7 @@ customTest.describe('Angular Practice Suite', () => {
 
     //Implement parameterization in running tests with different data sets
     dataset.forEach((data) => {
-        customTest(`Registration for ${data.name}`, async ({ registrationPage }) => {
+        customTest(`[Registration] should register successfully for : ${data.scenario}`, async ({ registrationPage }) => {
             await registrationPage.fillFormWithExternalJson(data);
             await registrationPage.submitForm();
             await expect(registrationPage.formSubmittedSuccessText).toBeVisible();
