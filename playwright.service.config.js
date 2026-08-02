@@ -23,7 +23,7 @@ export default defineConfig(
     */
     reporter: [
       ["html", { open: "never" }],
-      ["@azure/playwright/reporter"],
+      //["@azure/playwright/reporter"],
     ],
   }
 );
