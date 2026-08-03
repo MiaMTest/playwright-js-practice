@@ -19,7 +19,7 @@ customTest.describe('Upload the updated excel data file', async () => {
         const download = await donwloadPromise;
         await download.saveAs(filePath);
 
-        //add new row data
+        //add a new row data
         const addedRowValue = ['Watermelon', 'white', '999.99', 'Winter']
         await saveRowData(addedRowValue);
         //Upload the file and assert the success mesage
