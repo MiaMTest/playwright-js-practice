@@ -3,7 +3,7 @@ import { customTest } from "../utils/base-test";
 import { DocumentRequestPage } from '../page-objects/DocumentRequestPage';
 
 
-//Login test
+//Test login page
 customTest('Block by alert when login with incorrect username', async ({ loginPage }) => {
 
   await loginPage.login('', ' Learning@830$3mK2');
